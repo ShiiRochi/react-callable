@@ -59,10 +59,6 @@ type CreateCallableOptions = {|
 |};
 
 export const createCallable = (options: CreateCallableOptions = {}) => {
-  if (!outerRoot) {
-    createRoot();
-  }
-
   const { arguments: callableArguments, callableId, customRoot, async } = options;
 
   const {
@@ -74,6 +70,10 @@ export const createCallable = (options: CreateCallableOptions = {}) => {
   return Component => {
 
     const renderCallable = jsx => {
+      if (!customRoot && !outerRoot) {
+        createRoot();
+      }
+
       renderCallableContainer();
 
       render(jsx, container)
