@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import type {CallableContainerCreatorArguments} from "./flow-types/CallableContainerCreatorArguments";
+import type {CallableContainerCreatorArguments} from "../flow-types/CallableContainerCreatorArguments";
 
 // Example 1:
 // const Component1 = ({ title, description, onSuccess, onFail }) => <div />
