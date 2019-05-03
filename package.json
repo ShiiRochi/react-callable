@@ -1,7 +1,7 @@
 {
   "name": "react-callable",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/index.js",
   "repository": "https://github.com/ShiiRochi/react-callable.git",
   "author": "ShiiRochi <shiirochi@yandex.ru>",
   "scripts": {
@@ -18,8 +18,8 @@
     "@babel/preset-react": "^7.0.0",
     "flow-bin": "^0.98.0"
   },
-  "dependencies": {
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6"
+  "peerDependencies": {
+    "react": "15.x || 16.x",
+    "react-dom": "15.x || 16.x"
   }
 }
