@@ -180,6 +180,12 @@ class App extends Component {
 export default App;
 ```
 
+## TODO:
+- [ ] React Portals Support
+- [ ] Optional callableId
+- [ ] More examples: semantic
+- [ ] Callable chain
+
 ## P.S.
 
 To be honest, I made this package for self-usage, but I will be proud, if someone else will find it useful.
