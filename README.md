@@ -1,8 +1,24 @@
 # react-callable
 Callable components, that can be called from anywhere in your application.
 
-## WARNING: Work In Progress
-This respository still in `work in progress` state.
+## WARNING: WIP
+This repository still in `work in progress` state.
+This repository is not production tested yet.
+This repository is not fully described. (Sorry, I will finish it as soon as possible)
+
+# Why?
+Even when there is a very interested package like ```react-confirm```, I wanted to reinvent bicycle and create another interpretation of a library, allowing you, me and everybody else to create callable components.
+
+However, the main purpose of that library is to allow the creation of any type of components, i.e. modal dialogs, messages on different sides of a screen, tooltips, popovers and so on. 
+Actually, it does not mean, that react-callable will do all the stuff. It just gives some sort of help.
+
+## Concept
+When imagine what can be done, I made up 5 concepts to be reached.
+1. Callable should somehow be called
+2. Callable should somehow be closed
+3. Callable should somehow be accessed
+4. Callable should somehow be updated
+5. Callable should somehow be chained
 
 ## Usage:
 
@@ -137,3 +153,7 @@ class App extends Component {
 
 export default App;
 ```
+
+## P.S.
+
+To be honest, I made this package for self-usage, but I will be proud, if someone else will find it useful.
