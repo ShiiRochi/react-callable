@@ -10,7 +10,6 @@
     "react-scripts": "3.0.0"
   },
   "scripts": {
-    "prepare": "yarn --ignore-scripts install && cd ./node_modules/react-callable && yarn install && yarn build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
