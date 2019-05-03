@@ -13,8 +13,7 @@
     "@babel/preset-flow": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
     "@babel/preset-stage-0": "^7.0.0",
-    "flow-bin": "^0.98.0",
-    "webpack": "^4.30.0"
+    "flow-bin": "^0.98.0"
   },
   "dependencies": {
     "react": "^16.8.6",
