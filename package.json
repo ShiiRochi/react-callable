@@ -4,6 +4,11 @@
   "main": "index.js",
   "repository": "https://github.com/ShiiRochi/react-callable.git",
   "author": "ShiiRochi <shiirochi@yandex.ru>",
+  "scripts": {
+    "clean": "rimraf dist",
+    "build": "babel src --out-dir dist",
+    "prepublish": "npm run clean && npm run build"
+  },
   "license": "MIT",
   "devDependencies": {
     "@babel/cli": "^7.4.4",
