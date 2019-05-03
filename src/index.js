@@ -132,6 +132,3 @@ export const createCallable = (options: CreateCallableOptions = {}) => {
     };
   }
 };
-
-
-const callable1 = createCallable({ callableId:'super-modal-1', arguments:['title', 'description', 'onClick'] });
