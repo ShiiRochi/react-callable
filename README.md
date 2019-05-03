@@ -22,6 +22,32 @@ When imagine what can be done, I made up 5 concepts to be reached.
 
 ## Usage:
 
+### Installation
+
+```bash
+npm i --save react-callable
+```
+or
+```bash
+yarn add react-callable
+```
+
+### API
+
+##### createCallable
+```javascript
+import { createCallable } from 'react-callable';
+```
+Function that accepts an object of settings with following structure:
+1. async [boolean]  
+Defines, whether callable will return promise
+2. arguments [Array\<string>]  
+If defined, then on callable call you should pass arguments in the same order as defined in your arguments property.
+3. callableId [number]  
+Is used in callable container creation.
+4. customRoot [element]  
+By default callable is rendered in outside-root, that is created when first createCallable is called. But sometimes, we would want to render it in some other place. To make this we can use customRoot. It should be any DOM element reference. If passed, then callable will be rendered in customRoot.
+
 ### Example 1 - Async:
 
 ##### Confirm/index.js
