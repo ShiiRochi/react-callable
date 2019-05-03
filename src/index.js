@@ -2,15 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import type {CallableContainerCreatorArguments} from "../flow-types/CallableContainerCreatorArguments";
 
-// Example 1:
-// const Component1 = ({ title, description, onSuccess, onFail }) => <div />
-// const callable1 = createCallable({
-//    argumentsList: ['title', 'description', 'onSuccess', 'onFail'],
-//    callableId: '12'
-// })(Component1);
-
-// callable1('John', 'Doe', () => {}, () => {});
-
 let outerRoot = null;
 
 const render = (component, root = outerRoot, native = false) => {
@@ -50,12 +41,12 @@ const createCallableContainer = ({ customRoot, callableId }: CallableContainerCr
   container.setAttribute('id', `callable-${callableId}`)
 
   const destroyCallableContainer = !customRoot
-    ? () => destroy(container, outerRoot)
-    : () => destroy(container, customRoot);
+    ? () => destroy(container, outerRoot, true)
+    : () => destroy(container, customRoot, true);
 
   const renderCallableContainer = !customRoot
-    ? () => render(container, outerRoot)
-    : () => render(container, customRoot);
+    ? () => render(container, outerRoot, true)
+    : () => render(container, customRoot, true);
 
   return { container, renderCallableContainer, destroyCallableContainer, root: !customRoot ? outerRoot : customRoot };
 };
@@ -141,6 +132,3 @@ export const createCallable = (options: CreateCallableOptions = {}) => {
     };
   }
 };
-
-
-const callable1 = createCallable({ callableId:'super-modal-1', arguments:['title', 'description', 'onClick'] });

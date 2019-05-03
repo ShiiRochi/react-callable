@@ -1,6 +1,6 @@
 import React from 'react';
-import { createCallable } from "../../utils/react-callable";
 import styles from './styles.module.scss';
+import { createCallable } from "react-callable";
 
 const confirmCreator = createCallable({ async: true, arguments: ['title', 'description', 'onSubmit', 'onCancel'], callableId: 1 });
 
