@@ -1,15 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import type {CallableContainerCreatorArguments} from "../flow-types/CallableContainerCreatorArguments";
-
-// Example 1:
-// const Component1 = ({ title, description, onSuccess, onFail }) => <div />
-// const callable1 = createCallable({
-//    argumentsList: ['title', 'description', 'onSuccess', 'onFail'],
-//    callableId: '12'
-// })(Component1);
-
-// callable1('John', 'Doe', () => {}, () => {});
+import type {CallableContainerCreatorArguments} from "./flow-types/CallableContainerCreatorArguments";
 
 let outerRoot = null;
 
@@ -50,12 +41,12 @@ const createCallableContainer = ({ customRoot, callableId }: CallableContainerCr
   container.setAttribute('id', `callable-${callableId}`)
 
   const destroyCallableContainer = !customRoot
-    ? () => destroy(container, outerRoot)
-    : () => destroy(container, customRoot);
+    ? () => destroy(container, outerRoot, true)
+    : () => destroy(container, customRoot, true);
 
   const renderCallableContainer = !customRoot
-    ? () => render(container, outerRoot)
-    : () => render(container, customRoot);
+    ? () => render(container, outerRoot, true)
+    : () => render(container, customRoot, true);
 
   return { container, renderCallableContainer, destroyCallableContainer, root: !customRoot ? outerRoot : customRoot };
 };
@@ -113,7 +104,7 @@ export const createCallable = (options: CreateCallableOptions = {}) => {
         }
       };
 
-      const props = arguments && arguments.length > 0 ? propsGetter(args) : args[0];
+      const props = callableArguments && callableArguments.length > 0 ? propsGetter(args) : args[0];
 
 
       if (!async) {

@@ -67,3 +67,5 @@ typings/
 .vscode
 .idea
 
+# ignore dist directory
+dist

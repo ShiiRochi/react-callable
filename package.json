@@ -1,23 +1,25 @@
 {
   "name": "react-callable",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/index.js",
   "repository": "https://github.com/ShiiRochi/react-callable.git",
   "author": "ShiiRochi <shiirochi@yandex.ru>",
+  "scripts": {
+    "clean": "rimraf dist",
+    "build": "babel src --out-dir dist",
+    "prepublish": "npm run clean && npm run build"
+  },
   "license": "MIT",
   "devDependencies": {
     "@babel/cli": "^7.4.4",
     "@babel/core": "^7.4.4",
     "@babel/preset-env": "^7.4.4",
-    "@babel/preset-es2015": "^7.0.0-beta.53",
     "@babel/preset-flow": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
-    "@babel/preset-stage-0": "^7.0.0",
-    "flow-bin": "^0.98.0",
-    "webpack": "^4.30.0"
+    "flow-bin": "^0.98.0"
   },
-  "dependencies": {
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6"
+  "peerDependencies": {
+    "react": "15.x || 16.x",
+    "react-dom": "15.x || 16.x"
   }
 }
