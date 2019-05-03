@@ -1,8 +1,13 @@
 {
   "name": "react-callable",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "main": "dist/index.js",
   "repository": "https://github.com/ShiiRochi/react-callable.git",
+  "keywords": [
+    "react",
+    "callable",
+    "react-callable"
+  ],
   "author": "ShiiRochi <shiirochi@yandex.ru>",
   "scripts": {
     "clean": "rimraf dist",
@@ -16,7 +21,8 @@
     "@babel/preset-env": "^7.4.4",
     "@babel/preset-flow": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
-    "flow-bin": "^0.98.0"
+    "flow-bin": "^0.98.0",
+    "rimraf": "^2.6.3"
   },
   "peerDependencies": {
     "react": "15.x || 16.x",
