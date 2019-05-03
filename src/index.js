@@ -126,7 +126,7 @@ export const createCallable = (options: CreateCallableOptions = {}) => {
 
       return new Promise((resolve, reject) => {
 
-        const asyncConclude = (response) => conclude(resolve(response);
+        const asyncConclude = (response) => conclude(resolve(response));
 
         try {
           const callableComponent = <Component {...props} conclude={asyncConclude} />;
