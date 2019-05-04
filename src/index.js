@@ -85,7 +85,7 @@ export const createCallable = (options: CreateCallableOptions = {}) => {
       destroyCallableContainer();
     };
 
-    const propsGetter = (props) => callableArguments.reduce((result, argName, argIndex) => {
+    const propsGetter = (props) => !callableArguments ? props : callableArguments.reduce((result, argName, argIndex) => {
       const prop = props && props[argIndex] ? props[argIndex] : null;
 
       return {
