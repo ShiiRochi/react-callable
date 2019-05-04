@@ -38,7 +38,9 @@ const createRoot = () => {
 const createCallableContainer = ({ customRoot, callableId }: CallableContainerCreatorArguments = {}) => {
   const container = document.createElement('div');
 
-  container.setAttribute('id', `callable-${callableId}`)
+  if (callableId) {
+    container.setAttribute('id', `callable-${callableId}`)
+  }
 
   const destroyCallableContainer = !customRoot
     ? () => destroy(container, outerRoot, true)
