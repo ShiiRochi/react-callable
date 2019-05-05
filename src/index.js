@@ -6,9 +6,6 @@ import type { CreateCallableOptions } from "../flow-types/CreateCallableOptions"
 let outerRoot = null;
 
 const render = (component, root = outerRoot, native = false) => {
-    // thus we allow to pass functions as customRoot,
-    // thus on server may be no errors
-    // TODO: test for SSR-ready
     const resultRoot = typeof root === "function" ? root() : root;
 
     if (!native) {
@@ -20,9 +17,6 @@ const render = (component, root = outerRoot, native = false) => {
 };
 
 const destroy = (component, root, native = false) => {
-    // thus we allow to pass functions as customRoot,
-    // thus on server may be no errors
-    // TODO: test for SSR-ready
     const resultRoot = typeof root === "function" ? root() : root;
 
     if (!native) {
@@ -47,44 +41,36 @@ const createOuterRoot = () => {
     outerRoot = existedRoot || render(createdRoot, document.body, true);
 };
 
-const processCallableContainerOptions = ({ customRoot, callableId, dynamicRoot }: CreateCallableOptions = {}) => {
-    const container = document.createElement('div');
-
-    if (callableId) {
-        container.setAttribute('id', `callable-${callableId}`);
-    }
-
-    const destroyCallableContainer = !customRoot ?
-        (root) => destroy(container, dynamicRoot ? root || outerRoot : outerRoot, true) :
-        (root) => destroy(container, dynamicRoot ? root || customRoot : customRoot, true);
-
-    const renderCallableContainer = !customRoot ?
-        (root) => render(container, dynamicRoot ? root || outerRoot : outerRoot, true) :
-        (root) => render(container, dynamicRoot ? root || customRoot : customRoot, true);
-
-    return { container, renderCallableContainer, destroyCallableContainer, root: !customRoot ? outerRoot : customRoot };
-};
-
 export const createCallable = (options: CreateCallableOptions = {}) => {
-    const { arguments: callableArguments, customRoot, async, dynamicRoot } = options;
+    const { arguments: callableArguments, customRoot, async, dynamicRoot, callableId } = options;
 
-    const {
-        container,
-        renderCallableContainer,
-        destroyCallableContainer
-    } = processCallableContainerOptions(options);
-
+    // in this section we will predefine all required function,
+    // thus, we can create such things in SSR and call it on callable call
     return Component => {
-        const renderCallable = (jsx, forcedRoot) => {
-            renderCallableContainer(forcedRoot);
+        let container;
+
+        const createContainer = () => {
+            const elem = document.createElement('div');
+
+            if (callableId) {
+                elem.setAttribute('id', `callable-${callableId}`);
+            }
+
+            return elem;
+        };
+
+        const renderCallable = (jsx, root) => {
+            container = createContainer();
+
+            render(container, root, true);
 
             render(jsx, container);
         };
 
-        const destroyCallable = (forcedRoot) => {
+        const destroyCallable = (root) => {
             destroy(null, container);
 
-            destroyCallableContainer(forcedRoot);
+            destroy(container, root, true);
         };
 
         const propsGetter = (props) => !callableArguments ? props : callableArguments.reduce((result, argName, argIndex) => {
@@ -97,22 +83,37 @@ export const createCallable = (options: CreateCallableOptions = {}) => {
         }, {});
 
         return (...args) => {
-            // check if customRoot is not passed
-            // check if outerRoot is not created
-            if (!customRoot && !outerRoot && !dynamicRoot) {
+            let root;
+
+            const isArgumentsPassed = arguments && arguments.length > 0;
+
+            let rootFromProps = null;
+
+            if (dynamicRoot) {
+                rootFromProps = isArgumentsPassed ? args[args.length - 1] : args[1];
+            }
+
+            // here we calculate final props, what will be then passed to callableComponent
+            const props = isArgumentsPassed ? propsGetter(args) : args[0];
+
+            if (dynamicRoot && (typeof rootFromProps === 'function' && rootFromProps()) || rootFromProps) {
+                root = rootFromProps;
+            }
+
+            if (!outerRoot && !dynamicRoot && !root && !customRoot) {
                 createOuterRoot();
             }
 
-            // shouldCreateContainer
-            // if (shouldCreateContainer) {
-            //   renderCallableContainer();
-            // }
+            if (!root) {
+                root = customRoot || outerRoot;
+            }
+
 
             // create conclude function, that is used as a sign,
             // that callable call has been completed
             const conclude = (response) => {
                 // first of all, we need to destroy callable if it is required
-                destroyCallable();
+                destroyCallable(root);
 
                 // if response, passed to conclude if a function,
                 // we call it
@@ -121,17 +122,10 @@ export const createCallable = (options: CreateCallableOptions = {}) => {
                 }
             };
 
-            // here we calculate final props, what will be then passed to callableComponent
-            const usePropsGetter = arguments && arguments.length > 0;
-            const props = usePropsGetter ? propsGetter(args) : args[0];
-
-            const passedRoot = usePropsGetter ? args[args.length - 1] : args[1];
-
-
             if (!async) {
                 const callableComponent = <Component {...props} conclude={conclude} />;
 
-                renderCallable(callableComponent, passedRoot);
+                renderCallable(callableComponent, root);
 
                 return;
             }
@@ -142,7 +136,7 @@ export const createCallable = (options: CreateCallableOptions = {}) => {
                 try {
                     const callableComponent = <Component {...props} conclude={asyncConclude} />;
 
-                    renderCallable(callableComponent, passedRoot);
+                    renderCallable(callableComponent, root);
                 } catch (e) {
                     console.error('Cannot render callable component');
                     reject(e);
