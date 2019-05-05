@@ -38,7 +38,9 @@ const createOuterRoot = () => {
 
     if (createdRoot) createdRoot.setAttribute('id', 'outer-root');
 
-    outerRoot = existedRoot || render(createdRoot, document.body, true);
+    render(createdRoot, document.body, true);
+
+    outerRoot = existedRoot || createdRoot;
 };
 
 export const createCallable = (options: CreateCallableOptions = {}) => {
@@ -100,7 +102,7 @@ export const createCallable = (options: CreateCallableOptions = {}) => {
                 root = rootFromProps;
             }
 
-            if (!outerRoot && !dynamicRoot && !root && !customRoot) {
+            if (!outerRoot && !dynamicRoot && !customRoot) {
                 createOuterRoot();
             }
 
