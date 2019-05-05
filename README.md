@@ -45,8 +45,15 @@ Defines, whether callable will return promise
 If defined, then on callable call you should pass arguments in the same order as defined in your arguments property.
 3. callableId [number]  
 Is used in callable container creation.
-4. customRoot [element]  
-By default callable is rendered in outside-root, that is created when first createCallable is called. But sometimes, we would want to render it in some other place. To make this we can use customRoot. It should be any DOM element reference. If passed, then callable will be rendered in customRoot.
+4. customRoot [element or function]  
+By default callable is rendered in outside-root, that is created when first createCallable is called. But sometimes, we would want to render it in some other place. To make this we can use customRoot. It should be any DOM element reference. If passed, then callable will be rendered in customRoot.  
+`customRoot` can also be a function, that will be resolved when callable is called.
+It should return reference to a DOM element.
+5. dynamicRoot [boolean]  
+`dynamicRoot` is a special mechanism, 
+that allows you to pass reference to a target element as the very last argument into a call (at least it should be second arg, take it into account, examples below)
+
+### Examples
 
 ### Example 1 - Async:
 
@@ -180,11 +187,48 @@ class App extends Component {
 export default App;
 ```
 
+Now I will try to show only main differences. Sorry, but code takes a lot of space.
+
+### Example 3 - Dynamic Root
+
+```javascript
+import { createCallable } from "react-callable";
+
+// create confirm with 4 arguments and enable passing root as very last argument
+const confirmCreator = createCallable({ 
+    arguments: [
+        'title', 
+        'description', 
+        'onSubmit', 
+        'onCancel'
+    ], 
+    dynamicRoot: true 
+});
+
+// assume that Confirm was already defined somewhere
+const confirm = confirmCreator(Confirm);
+
+// because we turned on dynamicRoot, 
+// confirm will look for the very last argument, 
+// i.e. argument, that is be placed after all arguments, 
+// described in createCallable function
+confirm(
+    'Are you sure?', 
+    "You're going to do something?", 
+    () => alert('Just do it!'), 
+    () => alert("It's time to stop!"), 
+    document.querySelector('body > .custom-container')
+)
+```
+
 ## TODO:
+- [x] Optional callableId
+- [x] Optimize roots logic
+- [x] Allow to pass root in a call function
+- [ ] Direct node injection (no wrappers for callable, hope I will do it, first draft is ready)
 - [ ] React Portals Support
-- [ ] Optional callableId
 - [ ] More examples: semantic
-- [ ] Callable chain
+- [ ] Callable chain (not very soon, but want so much to do it)
 
 ## P.S.
 
