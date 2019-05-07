@@ -89,7 +89,7 @@ export const createCallable = (options: CreateCallableOptions = {}) => {
         return (...args) => {
             let root;
 
-            const isArgumentsPassed = arguments && arguments.length > 0;
+            const isArgumentsPassed = callableArguments && callableArguments.length > 0;
 
             let rootFromProps = null;
 
