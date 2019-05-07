@@ -36,9 +36,11 @@ const createOuterRoot = () => {
 
     const createdRoot = !existedRoot ? document.createElement('div') : null;
 
-    if (createdRoot) createdRoot.setAttribute('id', 'outer-root');
+    if (createdRoot) {
+        createdRoot.setAttribute('id', 'outer-root');
 
-    render(createdRoot, document.body, true);
+        render(createdRoot, document.body, true);
+    }
 
     outerRoot = existedRoot || createdRoot;
 };
