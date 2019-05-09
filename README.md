@@ -227,10 +227,10 @@ confirm(
 - [x] Optional callableId
 - [x] Optimize roots logic
 - [x] Allow to pass root in a call function
-- [ ] Direct node injection (no wrappers for callable, hope I will do it, first draft is ready)
-- [ ] React Portals Support
+- [X] Direct node injection
+- [X] React Portals Support
 - [ ] More examples: semantic
-- [ ] Callable chain (not very soon, but want so much to do it)
+- [ ] Callable chain
 
 ## P.S.
 
