@@ -5,26 +5,53 @@ import type { CreateCallableOptions } from "../flow-types/CreateCallableOptions"
 
 let outerRoot = null;
 
-const render = (component, root = outerRoot, native = false) => {
-    const resultRoot = typeof root === "function" ? root() : root;
+const render = (component, root: Node = outerRoot, engine: 'native' | 'portal' | null = null) => {
+    let resultRoot = null;
 
-    if (!native) {
-        ReactDOM.render(component, resultRoot);
-        return;
+    switch (typeof root) {
+        case 'function':
+            resultRoot = root();
+            break;
+        case 'string':
+            resultRoot = document.querySelector(root);
+            break;
+        default: resultRoot = root;
     }
 
-    resultRoot.appendChild(component);
+    switch (engine) {
+        case 'portal':
+            return ReactDOM.createPortal(
+                component,
+                resultRoot
+            );
+        case 'native':
+            resultRoot.appendChild(component);
+            break;
+        default:
+            ReactDOM.render(component, resultRoot);
+    }
 };
 
-const destroy = (component, root, native = false) => {
-    const resultRoot = typeof root === "function" ? root() : root;
+const destroy = (component, root, engine: 'native' | null = null) => {
+    let resultRoot = null;
 
-    if (!native) {
-        ReactDOM.unmountComponentAtNode(resultRoot);
-        return;
+    switch (typeof root) {
+        case 'function':
+            resultRoot = root();
+            break;
+        case 'string':
+            resultRoot = document.querySelector(root);
+            break;
+        default: resultRoot = root;
     }
 
-    resultRoot.removeChild(component);
+    switch (engine) {
+        case 'native':
+            resultRoot.removeChild(component);
+            break;
+        default:
+            ReactDOM.unmountComponentAtNode(resultRoot);
+    }
 };
 
 /**
@@ -39,25 +66,53 @@ const createOuterRoot = () => {
     if (createdRoot) {
         createdRoot.setAttribute('id', 'outer-root');
 
-        render(createdRoot, document.body, true);
+        render(createdRoot, document.body, 'native');
     }
 
     outerRoot = existedRoot || createdRoot;
 };
 
 export const createCallable = (options: CreateCallableOptions = {}) => {
-    const { arguments: callableArguments, customRoot, async, dynamicRoot, callableId } = options;
+    const { arguments: callableArguments, customRoot, async, dynamicRoot, callableId, directInjection } = options;
 
     // in this section we will predefine all required function,
     // thus, we can create such things in SSR and call it on callable call
     return Component => {
+        let ProxyComponent = !directInjection ? Component : class extends React.Component {
+            state = { visible: true };
+
+            conclude = (response) => {
+                const { conclude: proxyConclude } = this.props;
+
+                this.toggle(() => proxyConclude(response));
+            }
+
+            toggle = (callback) => {
+                this.setState(prevState => ({ visible: !prevState.visible }), callback);
+            };
+
+            render () {
+                if (!this.state.visible) return null;
+
+                return render(
+                    <Component {...this.props} />,
+                    customRoot || outerRoot,
+                    'portal'
+                );
+            }
+        };
+
         let container;
 
         const createContainer = () => {
             const elem = document.createElement('div');
 
-            if (callableId) {
+            if (callableId && !directInjection) {
                 elem.setAttribute('id', `callable-${callableId}`);
+            }
+
+            if (directInjection) {
+                elem.setAttribute('id', callableId ? `callable-proxy-${callableId}` : 'callable-proxy');
             }
 
             return elem;
@@ -66,7 +121,7 @@ export const createCallable = (options: CreateCallableOptions = {}) => {
         const renderCallable = (jsx, root) => {
             container = createContainer();
 
-            render(container, root, true);
+            render(container, root, 'native');
 
             render(jsx, container);
         };
@@ -74,7 +129,7 @@ export const createCallable = (options: CreateCallableOptions = {}) => {
         const destroyCallable = (root) => {
             destroy(null, container);
 
-            destroy(container, root, true);
+            destroy(container, root, 'native');
         };
 
         const propsGetter = (props) => !callableArguments ? props : callableArguments.reduce((result, argName, argIndex) => {
@@ -104,14 +159,15 @@ export const createCallable = (options: CreateCallableOptions = {}) => {
                 root = rootFromProps;
             }
 
-            if (!outerRoot && !dynamicRoot && !customRoot) {
+            if (!outerRoot && !dynamicRoot && !customRoot || directInjection) {
                 createOuterRoot();
             }
 
             if (!root) {
-                root = customRoot || outerRoot;
+                // using direct injection,
+                // we're rendering proxy container inside outerRoot
+                root = directInjection ? outerRoot : customRoot || outerRoot;
             }
-
 
             // create conclude function, that is used as a sign,
             // that callable call has been completed
@@ -127,7 +183,7 @@ export const createCallable = (options: CreateCallableOptions = {}) => {
             };
 
             if (!async) {
-                const callableComponent = <Component {...props} conclude={conclude} />;
+                const callableComponent = <ProxyComponent {...props} conclude={conclude} />;
 
                 renderCallable(callableComponent, root);
 
@@ -138,7 +194,7 @@ export const createCallable = (options: CreateCallableOptions = {}) => {
                 const asyncConclude = (response) => conclude(resolve(response));
 
                 try {
-                    const callableComponent = <Component {...props} conclude={asyncConclude} />;
+                    const callableComponent = <ProxyComponent {...props} conclude={asyncConclude} />;
 
                     renderCallable(callableComponent, root);
                 } catch (e) {
