@@ -1,8 +1,13 @@
 import React from 'react';
-import styles from './styles.module.scss';
+import styles from '../styles.module.scss';
 import { createCallable } from "react-callable";
 
-const confirmCreator = createCallable({ async: true, arguments: ['title', 'description', 'submitStatus', 'cancelStatus'], callableId: 1 });
+const confirmCreator = createCallable({
+  arguments: ['title', 'description', 'submitStatus', 'cancelStatus'],
+  callableId: 1,
+  directInjection: true,
+  customRoot: () => document.body
+});
 
 const Confirm = ({ title, description, submitStatus, cancelStatus, conclude }) => {
   return (

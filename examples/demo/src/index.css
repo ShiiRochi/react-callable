@@ -63,3 +63,40 @@ code {
 .btn-group.large .btn, .btn.large {
   padding: 1em 2em;
 }
+
+.flex {
+  display: flex;
+}
+
+.flex.row {
+  flex-direction: row;
+}
+
+.flex.equal div {
+  flex: 1;
+}
+
+.flex.column {
+  flex-direction: column;
+}
+
+.flex.align.center {
+  justify-content: center;
+}
+
+.flex.align.evenly {
+  justify-content: space-evenly;
+}
+
+.flex.align.items.center {
+  align-items: center;
+}
+
+.app {
+  min-height: 100vh;
+  background: #d2e6ff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
