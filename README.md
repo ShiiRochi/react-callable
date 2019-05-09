@@ -1,6 +1,12 @@
 # react-callable
 Callable components, that can be called from anywhere in your application.
 
+[![Inline docs](http://inch-ci.org/github/ShiiRochi/react-callable.svg?branch=master)](http://inch-ci.org/github/ShiiRochi/react-callable)
+
+[![Build Status](https://travis-ci.org/ShiiRochi/react-callable.png?branch=master)](https://travis-ci.org/ShiiRochi/react-callable)
+
+
+
 ## WARNING: WIP
 This repository still in `work in progress` state.  
 Some functionality can be broken.  
