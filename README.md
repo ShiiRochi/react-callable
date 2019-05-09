@@ -2,9 +2,9 @@
 Callable components, that can be called from anywhere in your application.
 
 ## WARNING: WIP
-This repository still in `work in progress` state.
-This repository is not production tested yet.
-This repository is not fully described. (Sorry, I will finish it as soon as possible)
+This repository still in `work in progress` state.  
+Some functionality can be broken.  
+If you have found some errors, please create issue and describe what version you're currently using and what error you have recevied.
 
 # Why?
 Even when there is a very interesting package like ```react-confirm```, I wanted to reinvent bicycle and create another interpretation of a library, allowing you, me and everybody else to create callable components.
@@ -52,6 +52,8 @@ It should return reference to a DOM element.
 5. dynamicRoot [boolean]  
 `dynamicRoot` is a special mechanism, 
 that allows you to pass reference to a target element as the very last argument into a call (at least it should be second arg, take it into account, examples below)
+
+Also you can pass no params at all into createCallable.
 
 ### Examples
 
