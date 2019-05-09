@@ -10,11 +10,22 @@ Callable components, that can be called from anywhere in your application.
 
 [![https://nodei.co/npm/react-callable.png?downloads=true&downloadRank=true&stars=true](https://nodei.co/npm/react-callable.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/react-callable)
 
-
+# Table of Contents
+0. [WARNING](#warning-wip)
+1. [Why?](#why?)
+2. [Concept](#concept)
+3. [Usage](#usage)
+    - [Installation](#installation)
+    - [API](#api)
+4. [Examples](#examples)
+    - [Async](#1async-callable)
+    - [Callbacks](#2callbacks-callable)
+    - [Dynamic Root](#3dynamic-root)
+    - [Plain callable](#4plain-callable)
 
 ## WARNING: WIP
 This repository still in `work in progress` state.  
-If you have found some errors, please create issue and describe what version you're currently using and what error you have recevied.
+If you have found some errors, please create issue and describe what version you're currently using and what error you have received.
 
 # Why?
 Even when there is a very interesting package like ```react-confirm```, I wanted to reinvent bicycle and create another interpretation of a library, allowing you, me and everybody else to create callable components.
@@ -67,7 +78,7 @@ Also you can pass no params at all into createCallable.
 
 ### Examples
 
-### Example 1 - Async:
+### 1.Async Callable:
 
 ##### Confirm/index.js
 ```javascript
@@ -133,7 +144,7 @@ class App extends Component {
 export default App;
 ```
 
-### Example 2 - Callbacks:
+### 2.Callbacks Callable:
 
 ##### Confirm/index.js
 ```javascript
@@ -201,7 +212,7 @@ export default App;
 
 Now I will try to show only main differences. Sorry, but code takes a lot of space.
 
-### Example 3 - Dynamic Root
+### 3.Dynamic Root
 
 ```javascript
 import { createCallable } from "react-callable";
@@ -231,6 +242,28 @@ confirm(
     () => alert("It's time to stop!"), 
     document.querySelector('body > .custom-container')
 )
+```
+
+### 4.Plain callable
+
+```javascript
+import { createCallable } from "react-callable";
+
+// create confirm with 4 arguments and enable passing root as very last argument
+const confirmCreator = createCallable();
+
+// assume that Confirm was already defined somewhere
+const confirm = confirmCreator(Confirm);
+
+// as soon as we didn't declare arguments createCallable
+// callable will assume, that the very first argument of confirm call is your props 
+// and will be pass as is to the component + callable special `conclude` prop for concluding itself
+confirm({
+    title: 'Are you sure?', 
+    description: "You're going to do something?", 
+    onSubmit: () => alert('Just do it!'), 
+    onCancel: () => alert("It's time to stop!"), 
+})
 ```
 
 ## TODO:
