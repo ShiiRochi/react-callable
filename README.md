@@ -12,16 +12,16 @@ Callable components, that can be called from anywhere in your application.
 
 # Table of Contents
 0. [WARNING](#warning-wip)
-1. [Why?](#why?)
+1. [Why?](#why)
 2. [Concept](#concept)
 3. [Usage](#usage)
     - [Installation](#installation)
     - [API](#api)
 4. [Examples](#examples)
-    - [Async](#1async-callable)
-    - [Callbacks](#2callbacks-callable)
-    - [Dynamic Root](#3dynamic-root)
-    - [Plain callable](#4plain-callable)
+    - [Async](#1---async-callable)
+    - [Callbacks](#2---callbacks-callable)
+    - [Dynamic Root](#3---dynamic-root)
+    - [Plain callable](#4---plain-callable)
 
 ## WARNING: WIP
 This repository still in `work in progress` state.  
@@ -78,7 +78,7 @@ Also you can pass no params at all into createCallable.
 
 ### Examples
 
-### 1.Async Callable:
+### 1 - Async Callable:
 
 ##### Confirm/index.js
 ```javascript
@@ -144,7 +144,7 @@ class App extends Component {
 export default App;
 ```
 
-### 2.Callbacks Callable:
+### 2 - Callbacks Callable:
 
 ##### Confirm/index.js
 ```javascript
@@ -212,7 +212,7 @@ export default App;
 
 Now I will try to show only main differences. Sorry, but code takes a lot of space.
 
-### 3.Dynamic Root
+### 3 - Dynamic Root
 
 ```javascript
 import { createCallable } from "react-callable";
@@ -244,7 +244,7 @@ confirm(
 )
 ```
 
-### 4.Plain callable
+### 4 - Plain callable
 
 ```javascript
 import { createCallable } from "react-callable";
@@ -272,7 +272,9 @@ confirm({
 - [x] Allow to pass root in a call function
 - [X] Direct node injection
 - [X] React Portals Support
+- [ ] Access root and container inside callable
 - [ ] More examples: semantic
+- [ ] Callable update
 - [ ] Callable chain
 
 ## P.S.
