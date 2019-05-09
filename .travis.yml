@@ -1,0 +1,4 @@
+script: yarn install && yarn build
+language: node_js
+node_js:
+  - "10.15.1"
