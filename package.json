@@ -12,7 +12,8 @@
   "scripts": {
     "clean": "rimraf dist",
     "build": "babel src --out-dir dist",
-    "prepublish": "npm run clean && npm run build"
+    "prepublish": "npm run clean && npm run build",
+    "start-demo:simple": "cd examples/demo && yarn start"
   },
   "license": "MIT",
   "devDependencies": {
