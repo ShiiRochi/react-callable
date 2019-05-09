@@ -14,7 +14,6 @@ Callable components, that can be called from anywhere in your application.
 
 ## WARNING: WIP
 This repository still in `work in progress` state.  
-Some functionality can be broken.  
 If you have found some errors, please create issue and describe what version you're currently using and what error you have recevied.
 
 # Why?
