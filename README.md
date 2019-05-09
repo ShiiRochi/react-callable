@@ -60,19 +60,40 @@ yarn add react-callable
 import { createCallable } from 'react-callable';
 ```
 Function that accepts an object of settings with following structure:
-1. async [boolean]  
+
+###### 1. async
+Type: `boolean`  
 Defines, whether callable will return promise
-2. arguments [Array\<string>]  
+
+###### 2. arguments
+Type: `Array<string>`  
 If defined, then on callable call you should pass arguments in the same order as defined in your arguments property.
-3. callableId [number]  
+
+###### 3. callableId
+Type: `number | string`  
 Is used in callable container creation.
-4. customRoot [element or function]  
-By default callable is rendered in outside-root, that is created when first createCallable is called. But sometimes, we would want to render it in some other place. To make this we can use customRoot. It should be any DOM element reference. If passed, then callable will be rendered in customRoot.  
-`customRoot` can also be a function, that will be resolved when callable is called.
-It should return reference to a DOM element.
-5. dynamicRoot [boolean]  
-`dynamicRoot` is a special mechanism, 
-that allows you to pass reference to a target element as the very last argument into a call (at least it should be second arg, take it into account, examples below)
+
+###### 4. customRoot
+Type: `element | function | string`  
+By default callable is rendered in outside-root, 
+that is created when first createCallable is called. 
+But sometimes, we would want to render it in some other place. 
+To make this we can use customRoot.  
+It accepts three type of data:
+1. string
+2. node reference
+3. function
+
+String will be used as a query selector to find dom node.  
+Function will be resolved on callable call and should return dom node.  
+
+###### 5. dynamicRoot 
+Type: `boolean`  
+It allows to pass reference to a target element as the very last argument into a call (at least it should be second arg, take it into account, examples below)
+
+###### 6. directInjection
+Type: `boolean`  
+If passed, then callable will be rendered without any wrappers inside specified customRoot
 
 Also you can pass no params at all into createCallable. (see [Plain callable](#4---plain-callable))
 
