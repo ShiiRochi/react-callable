@@ -1,9 +1,14 @@
 # react-callable
 Callable components, that can be called from anywhere in your application.
 
+[![Build Status](https://travis-ci.org/ShiiRochi/react-callable.png?branch=master)](https://travis-ci.org/ShiiRochi/react-callable)
+
+[![Dependency Status](https://david-dm.org/ShiiRochi/react-callable.svg)](https://david-dm.org/ShiiRochi/react-callable)
+[![devDependencies Status](https://david-dm.org/ShiiRochi/react-callable/dev-status.svg)](https://david-dm.org/ShiiRochi/react-callable?type=dev)
+
 [![Inline docs](http://inch-ci.org/github/ShiiRochi/react-callable.svg?branch=master)](http://inch-ci.org/github/ShiiRochi/react-callable)
 
-[![Build Status](https://travis-ci.org/ShiiRochi/react-callable.png?branch=master)](https://travis-ci.org/ShiiRochi/react-callable)
+[![https://nodei.co/npm/react-callable.png?downloads=true&downloadRank=true&stars=true](https://nodei.co/npm/react-callable.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/react-callable)
 
 
 
