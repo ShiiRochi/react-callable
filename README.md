@@ -74,7 +74,7 @@ It should return reference to a DOM element.
 `dynamicRoot` is a special mechanism, 
 that allows you to pass reference to a target element as the very last argument into a call (at least it should be second arg, take it into account, examples below)
 
-Also you can pass no params at all into createCallable.
+Also you can pass no params at all into createCallable. (see [Plain callable](#4---plain-callable))
 
 ### Examples
 
