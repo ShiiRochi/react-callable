@@ -156,6 +156,11 @@ export const createCallable = (options: CreateCallableOptions = {}) => {
             // here we calculate final props, what will be then passed to callableComponent
             const props = isArgumentsPassed ? propsGetter(args) : args[0];
 
+            // In case of dynamic injection, we want to separate root and manually passed root from each other
+            // because, passed root is where callable component is rendered as the result via Portal,
+            // and root is the place where proxy container is rendered
+            // If dynamicRoot is not set, then we consume, that passed root is the final destination
+            // for callable component to render
             if (!directInjection && dynamicRoot && (typeof rootFromProps === 'function' && rootFromProps() || rootFromProps)) {
                 root = rootFromProps;
             }
@@ -184,7 +189,7 @@ export const createCallable = (options: CreateCallableOptions = {}) => {
             };
 
             if (!async) {
-                const callableComponent = <ProxyComponent {...props} root={dynamicRoot ? rootFromProps : root} conclude={conclude} />;
+                const callableComponent = <ProxyComponent {...props} root={dynamicRoot ? rootFromProps || root : root} conclude={conclude} />;
 
                 renderCallable(callableComponent, root);
 
@@ -195,7 +200,7 @@ export const createCallable = (options: CreateCallableOptions = {}) => {
                 const asyncConclude = (response) => conclude(resolve(response));
 
                 try {
-                    const callableComponent = <ProxyComponent {...props} root={dynamicRoot ? rootFromProps : root} conclude={asyncConclude} />;
+                    const callableComponent = <ProxyComponent {...props} root={dynamicRoot ? rootFromProps || root : root} conclude={asyncConclude} />;
 
                     renderCallable(callableComponent, root);
                 } catch (e) {
