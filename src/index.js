@@ -92,11 +92,12 @@ export const createCallable = (options: CreateCallableOptions = {}) => {
             };
 
             render () {
+                const { root } = this.props;
                 if (!this.state.visible) return null;
 
                 return render(
                     <Component {...this.props} />,
-                    customRoot || outerRoot,
+                    root || customRoot || outerRoot,
                     'portal'
                 );
             }
@@ -155,7 +156,7 @@ export const createCallable = (options: CreateCallableOptions = {}) => {
             // here we calculate final props, what will be then passed to callableComponent
             const props = isArgumentsPassed ? propsGetter(args) : args[0];
 
-            if (dynamicRoot && (typeof rootFromProps === 'function' && rootFromProps()) || rootFromProps) {
+            if (!directInjection && dynamicRoot && (typeof rootFromProps === 'function' && rootFromProps() || rootFromProps)) {
                 root = rootFromProps;
             }
 
@@ -183,7 +184,7 @@ export const createCallable = (options: CreateCallableOptions = {}) => {
             };
 
             if (!async) {
-                const callableComponent = <ProxyComponent {...props} conclude={conclude} />;
+                const callableComponent = <ProxyComponent {...props} root={dynamicRoot ? rootFromProps : root} conclude={conclude} />;
 
                 renderCallable(callableComponent, root);
 
@@ -194,7 +195,7 @@ export const createCallable = (options: CreateCallableOptions = {}) => {
                 const asyncConclude = (response) => conclude(resolve(response));
 
                 try {
-                    const callableComponent = <ProxyComponent {...props} conclude={asyncConclude} />;
+                    const callableComponent = <ProxyComponent {...props} root={dynamicRoot ? rootFromProps : root} conclude={asyncConclude} />;
 
                     renderCallable(callableComponent, root);
                 } catch (e) {
