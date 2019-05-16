@@ -11,7 +11,6 @@ Callable components, that can be called from anywhere in your application.
 [![https://nodei.co/npm/react-callable.png?downloads=true&downloadRank=true&stars=true](https://nodei.co/npm/react-callable.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/react-callable)
 
 # Table of Contents
-0. [WARNING](#warning-wip)
 1. [Why?](#why)
 2. [Concept](#concept)
 3. [Usage](#usage)
@@ -23,15 +22,14 @@ Callable components, that can be called from anywhere in your application.
     - [Dynamic Root](#3---dynamic-root)
     - [Plain callable](#4---plain-callable)
 
-## WARNING: WIP
-This repository still in `work in progress` state.  
-If you have found some errors, please create issue and describe what version you're currently using and what error you have received.
-
 # Why?
-Even when there is a very interesting package like ```react-confirm```, I wanted to reinvent bicycle and create another interpretation of a library, allowing you, me and everybody else to create callable components.
+There are already a few libs that allows you to do the same things, however...this lib proposes another approach to the matter. It is another interpretation of a library, that allows you to create callable components.
 
-However, the main purpose of that library is to allow the creation of any type of components, i.e. modal dialogs, messages on different sides of a screen, tooltips, popovers and so on. 
-Actually, it does not mean, that react-callable will do all the stuff. It just gives some sort of help.
+Main purpose of that library is to allow the creation of any type of components. 
+In ideal, that means, that you're able to create your own callable modal dialogs, messages on different screensides, tooltips, popovers and so on. 
+
+It does not mean, that react-callable will do all the stuff. 
+It just gives some sort of help.
 
 ## Concept
 When imagine what can be done, I made up 5 concepts to be reached.
