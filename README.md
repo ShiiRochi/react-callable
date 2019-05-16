@@ -23,9 +23,9 @@ Callable components, that can be called from anywhere in your application.
     - [Plain callable](#4---plain-callable)
 
 # Why?
-There are already a few libs that allows you to do the same things, however...this lib proposes another approach to the matter. It is another interpretation of a library, that allows you to create callable components.
+There are already a few libs that allows you to do the same things, however...this lib proposes another approach to the matter.
 
-Main purpose of that library is to allow the creation of any type of components. 
+Main purpose of that library is to allow the creation of any type of callable components. 
 In ideal, that means, that you're able to create your own callable modal dialogs, messages on different screensides, tooltips, popovers and so on. 
 
 It does not mean, that react-callable will do all the stuff. 
