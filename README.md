@@ -295,6 +295,7 @@ confirm({
 - [ ] More examples: semantic
 - [ ] Callable update
 - [ ] Callable chain
+- [ ] onBeforeRender and onAfterConclude callbacks
 
 ## P.S.
 
