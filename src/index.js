@@ -54,6 +54,18 @@ const destroy = (component, root, engine: 'native' | null = null) => {
     }
 };
 
+// resolves passed node targeter
+const nodeResolver = (nodeTargeter: string | Function | Node) => {
+    switch (typeof nodeTargeter) {
+        case "string":
+            return document.querySelector(nodeTargeter);
+        case "function":
+            return nodeTargeter();
+        default:
+            return nodeTargeter;
+    }
+};
+
 /**
  * creates global root for callable
  * first of all we're trying to find already created root
@@ -73,7 +85,7 @@ const createOuterRoot = () => {
 };
 
 export const createCallable = (options: CreateCallableOptions = {}) => {
-    const { arguments: callableArguments, customRoot, async, dynamicRoot, callableId, directInjection } = options;
+    const { arguments: callableArguments, customRoot, async, dynamicRoot: dynamicRootEnabled, callableId, directInjection } = options;
 
     // in this section we will predefine all required function,
     // thus, we can create such things in SSR and call it on callable call
@@ -119,22 +131,31 @@ export const createCallable = (options: CreateCallableOptions = {}) => {
             return elem;
         };
 
-        const renderCallable = (jsx, root) => {
+        /**
+         * @param jsx
+         * @param containerRoot
+         */
+        const renderCallable = (jsx, containerRoot) => {
             container = createContainer();
 
-            render(container, root, 'native');
+            render(container, containerRoot, 'native');
 
             render(jsx, container);
         };
 
-        const destroyCallable = (root) => {
+        /**
+         * @param containerRoot
+         */
+        const destroyCallable = (containerRoot) => {
             destroy(null, container);
 
-            destroy(container, root, 'native');
+            destroy(container, containerRoot, 'native');
         };
 
-        const propsGetter = (props) => !callableArguments ? props : callableArguments.reduce((result, argName, argIndex) => {
-            const prop = props && props[argIndex] ? props[argIndex] : null;
+        const isArgumentsPassed = Array.isArray(callableArguments) && callableArguments.length > 0;
+
+        const propsGetter = callArgs => !isArgumentsPassed ? callArgs[0] : callableArguments.reduce((result, argName, argIndex) => {
+            const prop = callArgs && callArgs[argIndex] ? callArgs[argIndex] : null;
 
             return {
                 ...result,
@@ -143,43 +164,38 @@ export const createCallable = (options: CreateCallableOptions = {}) => {
         }, {});
 
         return (...args) => {
-            let root;
+            let componentRoot, containerRoot;
 
-            const isArgumentsPassed = callableArguments && callableArguments.length > 0;
+            let dynamicRoot;
 
-            let rootFromProps = null;
-
-            if (dynamicRoot) {
-                rootFromProps = isArgumentsPassed ? args[args.length - 1] : args[1];
+            if (dynamicRootEnabled) {
+                dynamicRoot = isArgumentsPassed ? args[args.length - 1] : args[1];
             }
 
-            // here we calculate final props, what will be then passed to callableComponent
-            const props = isArgumentsPassed ? propsGetter(args) : args[0];
+            const props = propsGetter(args);
 
-            // In case of dynamic injection, we want to separate root and manually passed root from each other
-            // because, passed root is where callable component is rendered as the result via Portal,
-            // and root is the place where proxy container is rendered
-            // If dynamicRoot is not set, then we consume, that passed root is the final destination
-            // for callable component to render
-            if (!directInjection && dynamicRoot && (typeof rootFromProps === 'function' && rootFromProps() || rootFromProps)) {
-                root = rootFromProps;
-            }
+            // we should create outer root if direct injection is enabled
+            // if custom root is not passed
+            // if dynamicRoot is enabled, but dynamic root is not present
+            const shouldCreateOuterRoot = directInjection || (dynamicRootEnabled && !dynamicRoot) || !customRoot;
 
-            if (!outerRoot && !dynamicRoot && !customRoot || directInjection) {
+            if (shouldCreateOuterRoot) {
                 createOuterRoot();
             }
 
-            if (!root) {
-                // using direct injection,
-                // we're rendering proxy container inside outerRoot
-                root = directInjection ? outerRoot : customRoot || outerRoot;
+            componentRoot = dynamicRoot || customRoot || outerRoot;
+
+            if (directInjection) {
+                containerRoot = outerRoot;
+            } else {
+                containerRoot = dynamicRoot || customRoot || outerRoot;
             }
 
             // create conclude function, that is used as a sign,
             // that callable call has been completed
             const conclude = (response) => {
                 // first of all, we need to destroy callable if it is required
-                destroyCallable(root);
+                destroyCallable(containerRoot);
 
                 // if response, passed to conclude if a function,
                 // we call it
@@ -189,25 +205,27 @@ export const createCallable = (options: CreateCallableOptions = {}) => {
             };
 
             if (!async) {
-                const callableComponent = <ProxyComponent {...props} root={dynamicRoot ? rootFromProps || root : root} conclude={conclude} />;
+                const callableComponent = <ProxyComponent {...props} root={componentRoot} conclude={conclude} />;
 
-                renderCallable(callableComponent, root);
+                renderCallable(callableComponent, containerRoot);
 
                 return;
             }
 
-            return new Promise((resolve, reject) => {
+            const asyncCallable = new Promise((resolve, reject) => {
                 const asyncConclude = (response) => conclude(resolve(response));
 
                 try {
-                    const callableComponent = <ProxyComponent {...props} root={dynamicRoot ? rootFromProps || root : root} conclude={asyncConclude} />;
+                    const callableComponent = <ProxyComponent {...props} root={componentRoot} conclude={asyncConclude} />;
 
-                    renderCallable(callableComponent, root);
+                    renderCallable(callableComponent, containerRoot);
                 } catch (e) {
                     console.error('Cannot render callable component');
                     reject(e);
                 }
             });
+
+            return asyncCallable;
         };
     };
 };
