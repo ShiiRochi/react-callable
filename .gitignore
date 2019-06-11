@@ -69,3 +69,5 @@ typings/
 
 # ignore dist directory
 dist
+
+examples/**/callable
