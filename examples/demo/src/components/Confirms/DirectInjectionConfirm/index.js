@@ -1,11 +1,12 @@
 import React from 'react';
 import styles from '../styles.module.scss';
-import { createCallable } from "react-callable";
+import { createCallable } from "../../../callable";
 
 const confirmCreator = createCallable({
   arguments: ['title', 'description', 'submitStatus', 'cancelStatus'],
   callableId: 1,
   directInjection: true,
+  dynamicRoot: true,
   customRoot: () => document.body
 });
 
