@@ -1,6 +1,15 @@
 # react-callable
 Callable components, that can be called from anywhere in your application.
 
+{% warning %}  
+The repository is not under active development.  
+{% endwarning %}
+
+{% note %}  
+Despite the message above, all contributions are still welcomed and appreciated.  
+{% endnote %}
+
+
 [![Build Status](https://travis-ci.org/ShiiRochi/react-callable.png?branch=master)](https://travis-ci.org/ShiiRochi/react-callable)
 
 [![Dependency Status](https://david-dm.org/ShiiRochi/react-callable.svg)](https://david-dm.org/ShiiRochi/react-callable)
